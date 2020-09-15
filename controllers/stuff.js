@@ -2,7 +2,8 @@ const Thing = require('../models/thing');
 const fs = require('fs');
 
 exports.createThing = (req, res, next) => {
-    const thingObject = JSON.parse(req.body.thing);
+  console.log(req.body)
+    const thingObject = JSON.parse(req.body.sauce);
     const thing = new Thing({
       ...thingObject,
       imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
@@ -31,7 +32,7 @@ exports.getOneThing = (req, res, next) => {
 exports.modifyThing = (req, res, next) => {
     const thingObject = req.file ?
       {
-        ...JSON.parse(req.body.thing),
+        ...JSON.parse(req.body.sauce),
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
       } : { ...req.body };
     Thing.updateOne({ _id: req.params.id }, { ...thingObject, _id: req.params.id })
