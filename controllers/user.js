@@ -1,7 +1,8 @@
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
-const User = require('../models/User')
+const jwt = require('jsonwebtoken'); // importation du package jsonwebtoken
+const bcrypt = require('bcrypt'); // importation du package bcrypt
+const User = require('../models/User'); // importation du model/schema User
 
+// INSCRIPTION D'UN UTILISATEUR + CHIFFRAGE MDP (BCRYPT)
 exports.signup = (req, res, next) => {
     bcrypt.hash(req.body.password, 10)
       .then(hash => {
@@ -16,6 +17,7 @@ exports.signup = (req, res, next) => {
       .catch(error => res.status(500).json({ error }));
   };
 
+  // CONNEXION UTILISATEUR + LOG TOKEN
   exports.login = (req, res, next) => {
     User.findOne({ email: req.body.email })
       .then(user => {
