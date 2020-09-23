@@ -1,18 +1,20 @@
+require('dotenv').config()
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const path = require('path');
 // Utilisation de helmet, collection de 9 middlewares de sécurité : csp, hidePowerBy, hsts, ieNoOpen, noCache, noSniff, frameguard, clickjacking, xssFilter
 const helmet = require('helmet');
-const cookieSession = require('cookie-session')
-const morgan = require('morgan')
+const morgan = require('morgan');
 
 
 const sauceRoutes = require('./routes/sauce');
 const userRoutes = require('./routes/user');
 
+
+
 // CONNECTION A LA BASE DE DONNEES
-mongoose.connect('mongodb+srv://sopekocko-p6:Gwa3TrTSbQQXAwPd@cluster0.tejy5.mongodb.net/sopekocko-p6?retryWrites=true&w=majority',
+mongoose.connect('mongodb+srv://'+process.env.DB_USER+':'+process.env.DB_PASS+"@"+process.env.DB_HOST,
     {
         useNewUrlParser: true,
         useUnifiedTopology: true
@@ -29,20 +31,6 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS'); // Methodes authorisés pour les requêtes HTTP
     next();
 });
-
-const expiryDate = new Date( Date.now() + 60 * 60 * 1000 ); // 1 heure
-app.use(cookieSession({
-  name: 'session',
-  keys: ['key1', 'key2'],
-  cookie: { secure: true,
-            httpOnly: true,
-            domain: 'http://localhost:3000',
-            path: 'foo/bar',
-            expires: expiryDate
-          }
-  })
-);
-
 
 app.use(bodyParser.json());
 app.use(helmet());
